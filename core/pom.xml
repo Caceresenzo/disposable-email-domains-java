@@ -14,7 +14,6 @@
 
 	<properties>
 		<slf4j.version>2.0.16</slf4j.version>
-		<lombok.version>1.18.34</lombok.version>
 
 		<junit.version>5.11.0</junit.version>
 		<assertj.version>3.26.3</assertj.version>
@@ -25,6 +24,7 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
