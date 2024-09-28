@@ -46,6 +46,8 @@ public class HttpChecker implements Checker {
 		final var temporaryPath = Files.createTempFile("list", ".txt");
 
 		try {
+			log.info("download domains - uri=`{}`", uri);
+
 			final var request = HttpRequest.newBuilder()
 				.uri(uri)
 				.GET()
@@ -61,9 +63,13 @@ public class HttpChecker implements Checker {
 			loadFrom(temporaryPath);
 
 			if (cache.isPresent()) {
+				final var cachePath = cache.get().path();
+
+				log.debug("update cache - from=`{}` to=`{}`", temporaryPath, cachePath);
+
 				Files.move(
 					temporaryPath,
-					cache.get().path(),
+					cachePath,
 					StandardCopyOption.REPLACE_EXISTING,
 					StandardCopyOption.ATOMIC_MOVE
 				);
@@ -75,7 +81,7 @@ public class HttpChecker implements Checker {
 
 	@SneakyThrows
 	private void loadFrom(Path path) {
-		log.info("load domains - path=`{}`", path);
+		log.debug("load domains - path=`{}`", path);
 
 		try (
 			final var lines = Files.lines(path)
@@ -117,6 +123,7 @@ public class HttpChecker implements Checker {
 		Duration freshness
 	) {
 
+		@SneakyThrows
 		public boolean isFresh() {
 			try {
 				final var lastModifiedTime = Files.getLastModifiedTime(path);
@@ -125,9 +132,6 @@ public class HttpChecker implements Checker {
 					.plus(freshness)
 					.isAfter(Instant.now());
 			} catch (NoSuchFileException __) {
-				return false;
-			} catch (Exception e) {
-				e.printStackTrace();
 				return false;
 			}
 		}
