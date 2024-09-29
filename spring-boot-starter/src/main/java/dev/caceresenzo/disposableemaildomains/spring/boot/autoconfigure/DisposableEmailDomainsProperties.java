@@ -21,8 +21,17 @@ public class DisposableEmailDomainsProperties {
 	public static class CheckersProperties {
 
 		private boolean dailyUpdatedDomains = true;
+		private List<FileCheckerProperties> file = new ArrayList<>();
 		private List<HttpCheckerProperties> http = new ArrayList<>();
 		private List<String> staticDomains = new ArrayList<>();
+
+		@Data
+		public static class FileCheckerProperties {
+
+			private String path;
+			private boolean ignoreIfMissing;
+
+		}
 
 		@Data
 		public static class HttpCheckerProperties {

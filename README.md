@@ -77,6 +77,10 @@ disposable-email-domains:
       - uri: https://raw.githubusercontent.com/disposable-email-domains/disposable-email-domains/refs/heads/main/disposable_email_blocklist.conf
         cache-path: disposable_email_blocklist.conf
 
+    # Add local file sources
+    file:
+      - path: domains.txt
+
     # Add static domains
     static-domains:
       - example.com

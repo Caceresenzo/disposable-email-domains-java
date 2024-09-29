@@ -32,6 +32,13 @@ public class DisposableEmailDomainsAutoConfiguration {
 			builder.githubDailyDisposableEmailDomains();
 		}
 
+		for (final var fileProperties : checkers.getFile()) {
+			builder.file(
+				Path.of(fileProperties.getPath()),
+				fileProperties.isIgnoreIfMissing()
+			);
+		}
+
 		for (final var httpProperties : checkers.getHttp()) {
 			final var httpBuilder = HttpChecker.builder()
 				.uri(httpProperties.getUri());

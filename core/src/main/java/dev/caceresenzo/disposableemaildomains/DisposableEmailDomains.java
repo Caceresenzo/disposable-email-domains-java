@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import dev.caceresenzo.disposableemaildomains.checker.Checker;
+import dev.caceresenzo.disposableemaildomains.checker.FileChecker;
 import dev.caceresenzo.disposableemaildomains.checker.HttpChecker;
 import dev.caceresenzo.disposableemaildomains.checker.StaticChecker;
 import lombok.Data;
@@ -54,6 +55,14 @@ public interface DisposableEmailDomains {
 					.cache(Path.of(temporaryLocation, "disposable-email-domains.txt"), Duration.ofSeconds(1))
 					.build()
 			);
+		}
+
+		public Builder file(Path path) {
+			return checker(new FileChecker(path));
+		}
+		
+		public Builder file(Path path, boolean ignoreIfMissing) {
+			return checker(new FileChecker(path, ignoreIfMissing));
 		}
 
 		public Builder staticDomains(String... domains) {

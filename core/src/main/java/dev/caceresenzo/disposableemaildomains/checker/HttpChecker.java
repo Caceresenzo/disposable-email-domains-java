@@ -115,7 +115,7 @@ public class HttpChecker implements Checker {
 
 	@Override
 	public String toString() {
-		return "HttpChecker[uri=%s, size=%s]".formatted(uri, domains.size());
+		return "HttpChecker[uri=`%s`, size=%s]".formatted(uri, domains.size());
 	}
 
 	public record Cache(
