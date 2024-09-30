@@ -52,7 +52,7 @@ public interface DisposableEmailDomains {
 			return checker(
 				HttpChecker.builder()
 					.uri("https://disposable.github.io/disposable-email-domains/domains.txt")
-					.cache(Path.of(temporaryLocation, "disposable-email-domains.txt"), Duration.ofSeconds(1))
+					.cache(Path.of(temporaryLocation, "disposable-email-domains.txt"), Duration.ofHours(23))
 					.build()
 			);
 		}
