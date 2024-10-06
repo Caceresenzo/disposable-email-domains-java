@@ -5,18 +5,20 @@ import java.nio.file.Path;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import dev.caceresenzo.disposableemaildomains.DisposableEmailDomains;
 import dev.caceresenzo.disposableemaildomains.checker.HttpChecker;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@EnableScheduling
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(DisposableEmailDomains.class)
-@EnableConfigurationProperties(DisposableEmailDomainsProperties.class)
+@Import(DisposableEmailDomainsProperties.class)
 public class DisposableEmailDomainsAutoConfiguration {
 
 	@Bean
@@ -59,11 +61,21 @@ public class DisposableEmailDomainsAutoConfiguration {
 		}
 
 		final var staticDomains = checkers.getStaticDomains();
+		System.out.println(staticDomains);
 		if (!staticDomains.isEmpty()) {
 			builder.staticDomains(staticDomains);
 		}
 
 		return builder.build();
+	}
+
+	@Bean
+	DisposableEmailDomainsReloadTask disposableEmailDomainsReloadTask(
+		DisposableEmailDomains disposableEmailDomains
+	) {
+		return new DisposableEmailDomainsReloadTask(
+			disposableEmailDomains
+		);
 	}
 
 }

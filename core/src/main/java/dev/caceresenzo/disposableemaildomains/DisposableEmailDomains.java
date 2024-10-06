@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import dev.caceresenzo.disposableemaildomains.checker.Checker;
@@ -60,7 +61,7 @@ public interface DisposableEmailDomains {
 		public Builder file(Path path) {
 			return checker(new FileChecker(path));
 		}
-		
+
 		public Builder file(Path path, boolean ignoreIfMissing) {
 			return checker(new FileChecker(path, ignoreIfMissing));
 		}
@@ -89,6 +90,10 @@ public interface DisposableEmailDomains {
 			this.checkers = checkers;
 
 			reload(false);
+		}
+
+		public List<Checker> getCheckers() {
+			return Collections.unmodifiableList(checkers);
 		}
 
 		@Override
