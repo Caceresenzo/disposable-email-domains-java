@@ -69,6 +69,11 @@ Which can be configured:
 ```yml
 disposable-email-domains:
   checkers:
+    # Automatic refresh of sources
+    reload:
+      enabled: true
+      fixed-date: P10M # every 10 minutes
+
     # Automatically configure: https://github.com/disposable/disposable-email-domains
     daily-updated-domains: true
 

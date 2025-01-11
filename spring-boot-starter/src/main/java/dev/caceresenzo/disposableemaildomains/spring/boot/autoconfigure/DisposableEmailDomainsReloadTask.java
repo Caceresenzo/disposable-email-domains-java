@@ -12,7 +12,7 @@ public class DisposableEmailDomainsReloadTask {
 
 	private final DisposableEmailDomains disposableEmailDomains;
 
-	@Scheduled(fixedRateString = "#{@" + DisposableEmailDomainsProperties.BEAN_NAME + ".getCheckers().getReloadFixedRate()}")
+	@Scheduled(fixedRateString = "#{@" + DisposableEmailDomainsProperties.BEAN_NAME + ".getCheckers().getReload().getFixedRate()}")
 	public void callReload() {
 		log.trace("calling reload");
 

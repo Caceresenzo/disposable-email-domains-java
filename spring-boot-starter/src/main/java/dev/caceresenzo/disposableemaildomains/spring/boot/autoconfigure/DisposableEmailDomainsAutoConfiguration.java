@@ -3,19 +3,20 @@ package dev.caceresenzo.disposableemaildomains.spring.boot.autoconfigure;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 
 import dev.caceresenzo.disposableemaildomains.DisposableEmailDomains;
 import dev.caceresenzo.disposableemaildomains.checker.HttpChecker;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@EnableScheduling
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(DisposableEmailDomains.class)
 @EnableConfigurationProperties
@@ -76,6 +77,8 @@ public class DisposableEmailDomainsAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnProperty(name = DisposableEmailDomainsProperties.PREFIX_CHECKERS_RELOAD_ENABLED, havingValue = "true", matchIfMissing = true)
+	@ConditionalOnBean(ScheduledAnnotationBeanPostProcessor.class)
 	DisposableEmailDomainsReloadTask disposableEmailDomainsReloadTask(
 		DisposableEmailDomains disposableEmailDomains
 	) {

@@ -17,6 +17,7 @@ public class DisposableEmailDomainsProperties {
 
 	public static final String PREFIX = "disposable-email-domains";
 	public static final String PREFIX_CHECKERS = PREFIX + ".checkers";
+	public static final String PREFIX_CHECKERS_RELOAD_ENABLED = PREFIX_CHECKERS + ".reload.enabled";
 	public static final String PREFIX_CHECKERS_STATIC_DOMAINS = PREFIX_CHECKERS + ".static-domains";
 
 	private CheckersProperties checkers = new CheckersProperties();
@@ -24,12 +25,20 @@ public class DisposableEmailDomainsProperties {
 	@Data
 	public static class CheckersProperties {
 
-		private Duration reloadFixedRate = Duration.ofMinutes(10);
+		private Reload reload = new Reload();
 
 		private boolean dailyUpdatedDomains = true;
 		private List<FileCheckerProperties> file = new ArrayList<>();
 		private List<HttpCheckerProperties> http = new ArrayList<>();
 		private List<String> staticDomains = new ArrayList<>();
+
+		@Data
+		public static class Reload {
+
+			private boolean enabled = true;
+			private Duration fixedRate = Duration.ofMinutes(10);
+
+		}
 
 		@Data
 		public static class FileCheckerProperties {
