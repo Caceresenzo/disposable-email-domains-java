@@ -21,7 +21,6 @@
 			<groupId>dev.caceresenzo.disposableemaildomains</groupId>
 			<artifactId>disposable-email-domains-core</artifactId>
 			<version>${project.version}</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
