@@ -5,9 +5,9 @@ import java.nio.file.Path;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import dev.caceresenzo.disposableemaildomains.DisposableEmailDomains;
@@ -18,12 +18,19 @@ import lombok.extern.slf4j.Slf4j;
 @EnableScheduling
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(DisposableEmailDomains.class)
-@Import(DisposableEmailDomainsProperties.class)
+@EnableConfigurationProperties
 public class DisposableEmailDomainsAutoConfiguration {
+
+	@Bean(DisposableEmailDomainsProperties.BEAN_NAME)
+	DisposableEmailDomainsProperties disposableEmailDomainsProperties() {
+		return new DisposableEmailDomainsProperties();
+	}
 
 	@Bean
 	@ConditionalOnMissingBean
-	DisposableEmailDomains disposableEmailDomains(DisposableEmailDomainsProperties properties) throws IOException {
+	DisposableEmailDomains disposableEmailDomains(
+		DisposableEmailDomainsProperties properties
+	) throws IOException {
 		log.info("Configuring Disposable Email Domains");
 
 		final var builder = DisposableEmailDomains.builder();
@@ -61,7 +68,6 @@ public class DisposableEmailDomainsAutoConfiguration {
 		}
 
 		final var staticDomains = checkers.getStaticDomains();
-		System.out.println(staticDomains);
 		if (!staticDomains.isEmpty()) {
 			builder.staticDomains(staticDomains);
 		}
