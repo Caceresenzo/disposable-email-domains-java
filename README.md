@@ -15,7 +15,7 @@
 
 ```xml
 <properties>
-    <disposable-email-domains.version>0.3.0</disposable-email-domains.version>
+    <disposable-email-domains.version>0.4.0</disposable-email-domains.version>
 </properties>
 
 <dependencies>
