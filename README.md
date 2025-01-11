@@ -4,14 +4,14 @@
 > The API is in beta, expect breaking changes.
 
 - [Disposable Email Domains for Java](#disposable-email-domains-for-java)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-  - [Usage](#usage)
-    - [Test if a Domain is blacklisted](#test-if-a-domain-is-blacklisted)
-    - [Test if an Email is from a blacklisted domain](#test-if-an-email-is-from-a-blacklisted-domain)
-  - [Spring Boot Starter](#spring-boot-starter)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+  - [Test if a Domain is blacklisted](#test-if-a-domain-is-blacklisted)
+  - [Test if an Email is from a blacklisted domain](#test-if-an-email-is-from-a-blacklisted-domain)
+- [Spring Boot Starter](#spring-boot-starter)
 
-## Installation
+# Installation
 
 ```xml
 <properties>
@@ -27,30 +27,30 @@
 </dependencies>
 ```
 
-## Configuration
+# Configuration
 
 ```java
 DisposableEmailDomains disposableEmailDomains = DisposableEmailDomains.builder()
-    .githubDailyDisposableEmailDomains()
-    .staticDomains("example.com")
-    .build();
+	.githubDailyDisposableEmailDomains()
+	.staticDomains("example.com")
+	.build();
 ```
 
-## Usage
+# Usage
 
-### Test if a Domain is blacklisted
+## Test if a Domain is blacklisted
 
 ```java
 boolean isBad = disposableEmailDomains.testDomain("example.com");
 ```
 
-### Test if an Email is from a blacklisted domain
+## Test if an Email is from a blacklisted domain
 
 ```java
 boolean isBad = disposableEmailDomains.testEmail("hello@example.com");
 ```
 
-## Spring Boot Starter
+# Spring Boot Starter
 
 There is a Spring Boot auto-configuration available.
 
