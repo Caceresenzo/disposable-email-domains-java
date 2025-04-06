@@ -1,5 +1,7 @@
 # Disposable Email Domains for Java
 
+Prevent users from signing up with temporary or disposable email addresses.
+
 > [!WARNING]
 > The API is in beta, expect breaking changes.
 
@@ -31,8 +33,16 @@
 
 ```java
 DisposableEmailDomains disposableEmailDomains = DisposableEmailDomains.builder()
+
+	/* configure https://github.com/disposable/disposable-email-domains */
 	.githubDailyDisposableEmailDomains()
-	.staticDomains("example.com")
+
+	/* add static domains */
+	.staticDomains("example.com", "bad.com")
+
+	/* load domains from a file */
+	.file(Path.of("domains.txt"))
+
 	.build();
 ```
 
@@ -45,6 +55,10 @@ boolean isBad = disposableEmailDomains.testDomain("example.com");
 ```
 
 ## Test if an Email is from a blacklisted domain
+
+> [!NOTE]
+> The default implementation splits the first `@` and uses the second part. <br />
+> If there is no `@` in the email, the whole string is taken as the domain.
 
 ```java
 boolean isBad = disposableEmailDomains.testEmail("hello@example.com");
@@ -72,7 +86,7 @@ disposable-email-domains:
     # Automatic refresh of sources
     reload:
       enabled: true
-      fixed-date: P10M # every 10 minutes
+      fixed-date: P10M  # every 10 minutes
 
     # Automatically configure: https://github.com/disposable/disposable-email-domains
     daily-updated-domains: true
