@@ -12,20 +12,21 @@ Prevent users from signing up with temporary or disposable email addresses.
   - [Test if a Domain is blacklisted](#test-if-a-domain-is-blacklisted)
   - [Test if an Email is from a blacklisted domain](#test-if-an-email-is-from-a-blacklisted-domain)
 - [Spring Boot Starter](#spring-boot-starter)
+  - [Validation](#validation)
 
 # Installation
 
 ```xml
 <properties>
-    <disposable-email-domains.version>0.4.1</disposable-email-domains.version>
+	<disposable-email-domains.version>0.4.1</disposable-email-domains.version>
 </properties>
 
 <dependencies>
-    <dependency>
-        <groupId>dev.caceresenzo.disposableemaildomains</groupId>
-        <artifactId>disposable-email-domains-core</artifactId>
-        <version>${disposable-email-domains.version}</version>
-    </dependency>
+	<dependency>
+		<groupId>dev.caceresenzo.disposableemaildomains</groupId>
+		<artifactId>disposable-email-domains-core</artifactId>
+		<version>${disposable-email-domains.version}</version>
+	</dependency>
 </dependencies>
 ```
 
@@ -70,11 +71,11 @@ There is a Spring Boot auto-configuration available.
 
 ```xml
 <dependencies>
-    <dependency>
-        <groupId>dev.caceresenzo.disposableemaildomains</groupId>
-        <artifactId>disposable-email-domains-spring-boot-starter</artifactId>
-        <version>${disposable-email-domains.version}</version>
-    </dependency>
+	<dependency>
+		<groupId>dev.caceresenzo.disposableemaildomains</groupId>
+		<artifactId>disposable-email-domains-spring-boot-starter</artifactId>
+		<version>${disposable-email-domains.version}</version>
+	</dependency>
 </dependencies>
 ```
 
@@ -103,4 +104,41 @@ disposable-email-domains:
     # Add static domains
     static-domains:
       - example.com
+```
+
+## Validation
+
+A constraint annotation is available for bean validation.
+
+> [!WARNING]
+> An `@Email` annotation is required to validate the email format itself.
+
+> [!TIP]
+> `spring-boot-starter-validation` is needed to make validation work.
+
+```java
+@Data
+class RegisterForm {
+
+	@NotBlank
+	@Email
+	@NonDisposableEmailDomain
+	private String email;
+
+}
+
+@RestController
+@RequestMapping(path = "auth")
+public class AuthController {
+
+	@PostMapping("register")
+	public void register(
+		@RequestBody @Validated RegisterForm body
+	) {
+		final var email = body.getEmail();
+
+		System.out.println(email);
+	}
+
+}
 ```
