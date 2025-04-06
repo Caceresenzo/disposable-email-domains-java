@@ -12,7 +12,8 @@ import dev.caceresenzo.disposableemaildomains.spring.boot.autoconfigure.Disposab
 @SpringBootTest(
 	classes = {
 		DisposableEmailDomainsAutoConfiguration.class,
-	}, properties = {
+	},
+	properties = {
 		"disposable-email-domains.checkers.reload.enabled=false",
 	}
 )

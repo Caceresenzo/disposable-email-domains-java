@@ -24,7 +24,7 @@ import dev.caceresenzo.disposableemaildomains.spring.boot.autoconfigure.Disposab
 		DisposableEmailDomainsAutoConfiguration.class,
 	},
 	properties = {
-		"disposableEmailDomains.checkers.static-domains[0]=example.com",
+		"disposable-email-domains.checkers.static-domains[0]=example.com",
 	}
 )
 class AutoConfigurationTest {
