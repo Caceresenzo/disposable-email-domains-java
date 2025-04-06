@@ -19,6 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 
 public interface DisposableEmailDomains {
 
+	/**
+	 * Test if the given email is disposable.
+	 * 
+	 * @param email Email to test.
+	 * @return <code>true</code> if the email's domain is on a list of disposable domains, <code>false</code> otherwise.
+	 * @implNote If the email does not contain an '@' character, it is interpreted as a domain. Otherwise, the email is split at the '@' and the second part is considered a domain.
+	 */
 	default boolean testEmail(String email) {
 		if (!email.contains("@")) {
 			return testDomain(email);
@@ -28,10 +35,23 @@ public interface DisposableEmailDomains {
 		return testDomain(parts[1]);
 	}
 
+	/**
+	 * Test if a domain provide disposable emails.
+	 * 
+	 * @param email Domain to test.
+	 * @return <code>true</code> if the domain is on a list of disposable domains, <code>false</code> otherwise.
+	 */
 	boolean testDomain(String domain);
 
+	/**
+	 * Reload all checkers. <br />
+	 * For dynamic checkers (like {@link HttpChecker}), it will update the cache by downloading the file again.
+	 * 
+	 * @param force <code>true</code> to force reloading of all checkers, <code>false</code> to reload only checkers that have expired.
+	 */
 	void reload(boolean force);
 
+	/** @return A new {@link Default default} builder. */
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -42,11 +62,23 @@ public interface DisposableEmailDomains {
 
 		private List<Checker> checkers = new ArrayList<>();
 
+		/**
+		 * Add a checker to the list of checkers.
+		 * 
+		 * @param checker Checker to add.
+		 * @return <code>this</code>
+		 */
 		public Builder checker(Checker checker) {
 			checkers.add(checker);
 			return this;
 		}
 
+		/**
+		 * Add the <a href="https://github.com/disposable/disposable-email-domains">Daily Updated Disposable Email Domains list from Github</a>. <br />
+		 * It is implemented as a {@link HttpChecker} with a cache of 23 hours.
+		 * 
+		 * @return <code>this</code>
+		 */
 		public Builder githubDailyDisposableEmailDomains() {
 			final var temporaryLocation = System.getProperty("java.io.tmpdir");
 
@@ -58,28 +90,67 @@ public interface DisposableEmailDomains {
 			);
 		}
 
+		/**
+		 * Add a checker that loads a list from a file. <br />
+		 * If the file does not exist, it is simply ignored.
+		 * 
+		 * @param path Path to the file.
+		 * @return <code>this</code>
+		 */
 		public Builder file(Path path) {
 			return checker(new FileChecker(path));
 		}
 
+		/**
+		 * Add a checker that loads a list from a file.
+		 * 
+		 * @param path Path to the file.
+		 * @param ignoreIfMissing If <code>true</code>, the checker will throw an exception if the file does not exist.
+		 * @return <code>this</code>
+		 */
 		public Builder file(Path path, boolean ignoreIfMissing) {
 			return checker(new FileChecker(path, ignoreIfMissing));
 		}
 
+		/**
+		 * Specify static domains directly. <br />
+		 * If the array is empty, no checker is added.
+		 * 
+		 * @param domains Domains to consider as disposable.
+		 * @return <code>this</code>
+		 */
 		public Builder staticDomains(String... domains) {
 			return staticDomains(Arrays.asList(domains));
 		}
 
+		/**
+		 * Specify static domains directly. <br />
+		 * If the collection is empty, no checker is added.
+		 * 
+		 * @param domains Domains to consider as disposable.
+		 * @return <code>this</code>
+		 */
 		public Builder staticDomains(Collection<String> domains) {
+			if (domains.isEmpty()) {
+				return this;
+			}
+
 			return checker(new StaticChecker(domains));
 		}
 
+		/** @return The built {@link DisposableEmailDomains} instance. */
 		public DisposableEmailDomains build() {
 			return new Default(checkers);
 		}
 
 	}
 
+	/**
+	 * Default implementation of {@link DisposableEmailDomains}. <br />
+	 * It is a simple wrapper around a list of {@link Checker} instances.
+	 * 
+	 * @implNote The {@link DisposableEmailDomains#reload(boolean) reload(false)} method is called in the constructor.
+	 */
 	@Slf4j
 	@ToString
 	public static class Default implements DisposableEmailDomains {

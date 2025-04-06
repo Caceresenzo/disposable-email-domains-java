@@ -15,6 +15,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * A {@link Checker} that loads domains from a file. <br />
+ * <br />
+ * Characteristics:
+ * <ul>
+ * <li>No error is thrown if <code>ignoreIfMissing</code> is set to <code>true</code>.</li>
+ * <li>The file is reloaded if it has been modified since the last load.</li>
+ * </ul>
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class FileChecker implements Checker {

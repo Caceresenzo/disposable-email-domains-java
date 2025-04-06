@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * A {@link Checker} that use domains from a static (in memory) list.
+ */
 public class StaticChecker implements Checker {
 
 	private final Set<String> domains;

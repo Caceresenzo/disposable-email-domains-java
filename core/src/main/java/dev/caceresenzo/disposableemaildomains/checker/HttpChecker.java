@@ -26,6 +26,15 @@ import lombok.experimental.Accessors;
 import lombok.experimental.Tolerate;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * A {@link Checker} that loads domains from a remote HTTP endpoint. <br />
+ * <br />
+ * Characteristics:
+ * <ul>
+ * <li>Load data stored on an URL.</li>
+ * <li>Cache the data locally to avoid fetching the data everytime.</li>
+ * </ul>
+ */
 @Slf4j
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class HttpChecker implements Checker {
@@ -152,26 +161,51 @@ public class HttpChecker implements Checker {
 		private Cache cache;
 		private HttpClient httpClient;
 
+		/**
+		 * Set the URI to load the list from.
+		 * 
+		 * @param uri URI to load the list from.
+		 * @return <code>this</code>
+		 */
 		@Tolerate
 		public Builder uri(String uri) {
 			return uri(URI.create(uri));
 		}
 
+		/**
+		 * Disable the cache.
+		 * 
+		 * @return <code>this</code>
+		 */
 		@Tolerate
 		public Builder noCache() {
 			return cache((Cache) null);
 		}
 
+		/**
+		 * Enable the cache to a path with a {@link Builder#DEFAULT_CACHE_FRESHNESS default} expiration.
+		 * 
+		 * @param path Path to the cache file.
+		 * @return <code>this</code>
+		 */
 		@Tolerate
 		public Builder cache(Path path) {
 			return cache(new Cache(path, DEFAULT_CACHE_FRESHNESS));
 		}
 
+		/**
+		 * Enable the cache to a path with an expiration.
+		 * 
+		 * @param path Path to the cache file.
+		 * @param freshness Expiration duration.
+		 * @return <code>this</code>
+		 */
 		@Tolerate
 		public Builder cache(Path path, Duration freshness) {
 			return cache(new Cache(path, freshness));
 		}
 
+		/** @return The built {@link HttpChecker} instance. */
 		public HttpChecker build() {
 			if (httpClient == null) {
 				httpClient = HttpClient.newBuilder().build();
