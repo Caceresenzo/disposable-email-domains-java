@@ -18,7 +18,7 @@ Prevent users from signing up with temporary or disposable email addresses.
 
 ```xml
 <properties>
-	<disposable-email-domains.version>0.4.1</disposable-email-domains.version>
+	<disposable-email-domains.version>0.5.0</disposable-email-domains.version>
 </properties>
 
 <dependencies>
